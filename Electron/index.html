@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurador Macro Pad</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Panel izquierdo para el control remoto */
+        #panel-control {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-right: 1px solid #333;
+        }
+
+        /* Contenedor del control remoto */
+        #macropad-container {
+            width: 320px;
+            height: 680px;
+            background-color: #1e1e1e;
+            /* Aquí puedes poner la ruta a la foto limpia de tu control */
+            /* background-image: url('./control-limpio.png'); */
+            background-size: cover;
+            background-position: center;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(7, 1fr);
+            gap: 15px;
+        }
+
+        .boton-mapeado {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            text-align: center;
+            transition: all 0.2s ease;
+            user-select: none;
+            overflow: hidden;
+            padding: 5px;
+        }
+
+        .boton-mapeado:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            border-color: #64ffda;
+        }
+
+        .boton-mapeado.drag-over {
+            background-color: rgba(100, 255, 218, 0.3);
+            border-color: #64ffda;
+            transform: scale(1.05);
+        }
+
+        .boton-nombre { font-weight: bold; margin-bottom: 3px; color: #64ffda;}
+        .boton-valor { font-size: 9px; opacity: 0.7; word-break: break-all; }
+
+        /* Panel derecho para información */
+        #panel-info {
+            width: 350px;
+            padding: 30px;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 { margin-top: 0; color: #64ffda; }
+        
+        .instrucciones {
+            background-color: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .icono-app {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+            object-fit: contain;
+        }
+
+        /* El fondo oscuro del modal */
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* La cajita del modal */
+        #modal-box {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 12px;
+            width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        #modal-box h3 { margin-top: 0; color: #64ffda; }
+        
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            color: white;
+        }
+
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #444;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        button:hover { background: #555; }
+        #btn-aceptar { background: #64ffda; color: #000; }
+        #btn-aceptar:hover { background: #4ac9aa; }
+        
+        .botones-modal { display: flex; justify-content: flex-end; gap: 10px; }
+
+        .icono-app {
+            width: 32px;  /* Controla el contenedor para favicons de webs */
+            height: 32px; /* Controla el contenedor para favicons de webs */
+            margin-bottom: 5px;
+            object-fit: contain;
+        }
+
+        /* Esta nueva clase targetea directamente a los iconos de Font Awesome */
+        .boton-mapeado i {
+            font-size: 26px; /* Ajusta el tamaño de todos los iconos estáticos */
+            color: #64ffda;  /* El color verde cian oficial de tu macro pad */
+            margin-bottom: 5px; /* Separa el icono del nombre */
+        }
+        
+        /* Ajuste específico para que las marcas tengan su color original si quieres */
+        .boton-mapeado i.fa-whatsapp { color: #25D366; }
+        .boton-mapeado i.fa-steam { color: #ffffff; }
+
+    </style>
+</head>
+<body>
+
+    <div id="panel-control">
+        <div id="macropad-container">
+            <div class="boton-mapeado" id="BA45FF00"></div>
+            <div class="boton-mapeado" id="B946FF00"></div>
+            <div class="boton-mapeado" id="B847FF00"></div>
+
+            <div class="boton-mapeado" id="BB44FF00"></div>
+            <div class="boton-mapeado" id="BF40FF00"></div>
+            <div class="boton-mapeado" id="BC43FF00"></div>
+
+            <div class="boton-mapeado" id="F807FF00"></div>
+            <div class="boton-mapeado" id="EA15FF00"></div>
+            <div class="boton-mapeado" id="F609FF00"></div>
+
+            <div class="boton-mapeado" id="E916FF00"></div>
+            <div class="boton-mapeado" id="E619FF00"></div>
+            <div class="boton-mapeado" id="F20DFF00"></div>
+
+            <div class="boton-mapeado" id="F30CFF00"></div>
+            <div class="boton-mapeado" id="E718FF00"></div>
+            <div class="boton-mapeado" id="A15EFF00"></div>
+
+            <div class="boton-mapeado" id="F708FF00"></div>
+            <div class="boton-mapeado" id="E31CFF00"></div>
+            <div class="boton-mapeado" id="A55AFF00"></div>
+
+            <div class="boton-mapeado" id="BD42FF00"></div>
+            <div class="boton-mapeado" id="AD52FF00"></div>
+            <div class="boton-mapeado" id="B54AFF00"></div>
+        </div>
+    </div>
+
+    <div id="panel-info">
+        <h2>Configurador Activo</h2>
+        <div class="instrucciones">
+            <strong>Cómo configurar un botón:</strong><br><br>
+            1. Haz clic en cualquier botón de la cuadrícula para abrir el editor manual.<br>
+            2. O arrastra un archivo <code>.exe</code> directamente sobre un botón.<br><br>
+            Los cambios se guardan y aplican al instante.
+        </div>
+        <p style="font-size: 12px; color: #888;">El icono de las aplicaciones se extraerá automáticamente del ejecutable.</p>
+    </div>
+
+    <div id="modal-overlay">
+        <div id="modal-box">
+            <h3 id="modal-titulo">Configurar Botón</h3>
+            <p style="font-size: 13px; color: #aaa;">Ingresa una URL (ej. https://youtube.com) o la ruta de un ejecutable.</p>
+            
+            <div class="input-group">
+                <input type="text" id="input-ruta" placeholder="Ruta o URL...">
+                <button id="btn-buscar">Buscar</button>
+            </div>
+            
+            <div class="botones-modal">
+                <button id="btn-cancelar">Cancelar</button>
+                <button id="btn-aceptar">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+   <script>
+        // === NUEVO: MAPEO DE TUS BOTONES FÍSICOS ===
+        const NOMBRES_TECLAS = {
+            "BA45FF00": "Prev", "B946FF00": "Pause", "B847FF00": "Next",
+            "BB44FF00": "Vol-", "BF40FF00": "Vol+", "BC43FF00": "Mute",
+            "F807FF00": "Menos (-)", "EA15FF00": "Más (+)", "F609FF00": "EQ",
+            "E916FF00": "0", "E619FF00": "100+", "F20DFF00": "200+",
+            "F30CFF00": "1", "E718FF00": "2", "A15EFF00": "3",
+            "F708FF00": "4", "E31CFF00": "5", "A55AFF00": "6",
+            "BD42FF00": "7", "AD52FF00": "8", "B54AFF00": "9"
+        };
+        const ICONOS_ESTATICOS = {
+            "previous track": `<i class="fa-solid fa-backward-step"></i>`,
+            "play/pause media": `<i class="fa-solid fa-pause"></i>`,
+            "next track": `<i class="fa-solid fa-forward-step"></i>`,
+            "volume down": `<i class="fa-solid fa-volume-low"></i>`,
+            "volume up": `<i class="fa-solid fa-volume-high"></i>`,
+            "volume mute": `<i class="fa-solid fa-volume-xmark"></i>`,
+            "ensordecer_discord": `<i class="fa-solid fa-ear-deaf"></i>`, // Un headset con una barra de bloqueo
+            "mutear_discord": `<i class="fa-solid fa-microphone-slash"></i>`,  // Un micrófono bloqueado
+          "toggle_whatsapp": `<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="icono-app">`,
+            "toggle_steam": `<img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" class="icono-app">`,     // Logo oficial vectorial
+            "toggle_editMacroPad": `<i class="fa-solid fa-gear"></i>` // Un icono de engranajes para la configuración del Macro Pad
+        };
+
+        let configGlobal = {};
+        let botonEditandoActual = null; 
+
+        async function actualizarInterfaz() {
+            const botonesUI = document.querySelectorAll('.boton-mapeado');
+            
+            for (const boton of botonesUI) {
+                const hexCode = boton.id;
+                const datosBoton = configGlobal[hexCode];
+
+                if (datosBoton) {
+                    let nombreCorto = datosBoton.nombre.split(':')[0]; 
+                    let htmlContenido = `<div class="boton-nombre">${nombreCorto}</div>`;
+
+                    // 1. Revisar si es una acción con icono estático
+                    if (ICONOS_ESTATICOS[datosBoton.valor]) {
+                        htmlContenido = ICONOS_ESTATICOS[datosBoton.valor] + htmlContenido;
+                    } 
+                    // NUEVO: Excepciones para los juegos rebeldes de Riot
+                    else if (nombreCorto.toLowerCase().includes('lol') || nombreCorto.toLowerCase().includes('league')) {
+                        htmlContenido = `<img src="https://upload.wikimedia.org/wikipedia/commons/d/d8/League_of_Legends_2019_vector.svg" class="icono-app">` + htmlContenido;
+                    }
+                    else if (nombreCorto.toLowerCase().includes('valorant')) {
+                        // Usa el logo de Valorant, o el de Riot Games como respaldo por si falla la carga
+                        htmlContenido = `<img src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Valorant_logo_-_pink_color_version.svg" class="icono-app" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/1/1a/Riot_Games_logo_icon.svg'">` + htmlContenido;
+                    }
+                    // 2. Si no es estático ni de Riot y es app, buscar el icono del .exe
+                    else if (datosBoton.tipo === 'app' && datosBoton.valor) {
+                        let rutaLimpia = datosBoton.valor.replace(/"/g, ''); 
+                        
+                        
+                        if (rutaLimpia.toLowerCase().includes('.exe ')) {
+                            rutaLimpia = rutaLimpia.substring(0, rutaLimpia.toLowerCase().indexOf('.exe') + 4);
+                        }
+
+                        const iconBase64 = await window.api.obtenerIcono(rutaLimpia);
+                        if (iconBase64) {
+                            htmlContenido = `<img src="${iconBase64}" class="icono-app">` + htmlContenido;
+                        }
+                    } 
+                    // 3. Webs (Tu código anterior intacto)
+                    else if (datosBoton.tipo.includes('web')) {
+                        try {
+                            let urlString = datosBoton.valor;
+                            if (!urlString.startsWith('http')) urlString = 'https://' + urlString;
+                            
+                            const hostname = new URL(urlString).hostname;
+                            let dominioParaIcono = hostname;
+                            
+                            if (hostname.includes('ucm.cl')) {
+                                dominioParaIcono = 'ucm.cl';
+                            }
+                            
+                            const faviconUrl = `https://www.google.com/s2/favicons?domain=${dominioParaIcono}&sz=32`;
+                            
+                            htmlContenido = `<img src="${faviconUrl}" class="icono-app" onerror="this.outerHTML='<div style=\\'font-size: 20px;\\'>🌐</div>' ">` + htmlContenido;
+                        } catch (e) {
+                            htmlContenido = `<div style="font-size: 20px;">🌐</div>` + htmlContenido;
+                        }
+                    }
+
+                    boton.innerHTML = htmlContenido;
+                    boton.title = `${datosBoton.nombre}\nAcción: ${datosBoton.valor}`;
+                } else {
+                    boton.innerHTML = 'Vacío';
+                }
+            }
+        }
+
+        // === Lógica de Drag & Drop ===
+        const botonesDrag = document.querySelectorAll('.boton-mapeado');
+        botonesDrag.forEach(boton => {
+            boton.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                boton.classList.add('drag-over');
+            });
+
+            boton.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                boton.classList.remove('drag-over');
+            });
+
+            boton.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                boton.classList.remove('drag-over');
+
+                const archivos = e.dataTransfer.files;
+                if (archivos.length > 0) {
+                    const archivo = archivos[0];
+                    const rutaAbsoluta = archivo.path;
+                    const hexCode = boton.id;
+                    const nombreExe = rutaAbsoluta.split('\\').pop();
+                    
+                    // NUEVO: Usa el mapa para asignar la tecla física correcta (ej. "1: RocketLeague.exe")
+                    const prefijoTecla = NOMBRES_TECLAS[hexCode] || "Btn";
+
+                    configGlobal[hexCode] = {
+                        nombre: `${prefijoTecla}: ${nombreExe}`,
+                        tipo: "app",
+                        valor: rutaAbsoluta
+                    };
+
+                    actualizarInterfaz();
+                    window.api.guardarConfig(configGlobal);
+                }
+            });
+        });
+
+        // === Lógica del Modal ===
+        const modal = document.getElementById('modal-overlay');
+        const inputRuta = document.getElementById('input-ruta');
+        
+        document.querySelectorAll('.boton-mapeado').forEach(boton => {
+            boton.addEventListener('click', () => {
+                botonEditandoActual = boton.id;
+                
+                if (configGlobal[botonEditandoActual]) {
+                    inputRuta.value = configGlobal[botonEditandoActual].valor.replace(/"/g, '');
+                } else {
+                    inputRuta.value = '';
+                }
+                
+                // Muestra qué botón físico estás configurando
+                const nombreFisico = NOMBRES_TECLAS[botonEditandoActual] || botonEditandoActual;
+                document.getElementById('modal-titulo').innerText = `Configurando Botón: ${nombreFisico}`;
+                modal.style.display = 'flex';
+                inputRuta.focus();
+            });
+        });
+
+        document.getElementById('btn-cancelar').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        document.getElementById('btn-buscar').addEventListener('click', async () => {
+            const rutaElegida = await window.api.abrirExplorador();
+            if (rutaElegida) {
+                inputRuta.value = rutaElegida;
+            }
+        });
+
+        document.getElementById('btn-aceptar').addEventListener('click', () => {
+            const nuevoValor = inputRuta.value.trim();
+            if (!nuevoValor) {
+                modal.style.display = 'none';
+                return; 
+            }
+
+            let tipoDetectado = "app";
+            if (nuevoValor.startsWith('http://') || nuevoValor.startsWith('https://') || nuevoValor.startsWith('www.')) {
+                tipoDetectado = "web";
+            }
+
+            let nombreCorto = nuevoValor;
+            if (tipoDetectado === 'app') {
+                nombreCorto = nuevoValor.split('\\').pop(); 
+            } else {
+                try {
+                    nombreCorto = new URL(nuevoValor).hostname.replace('www.', ''); 
+                } catch(e) {}
+            }
+
+            // NUEVO: Concatenar el número físico con la acción para el nombre final
+            const prefijoTecla = NOMBRES_TECLAS[botonEditandoActual] || "Btn";
+
+            configGlobal[botonEditandoActual] = {
+                nombre: `${prefijoTecla}: ${nombreCorto}`,
+                tipo: tipoDetectado,
+                valor: nuevoValor
+            };
+
+            actualizarInterfaz();
+            window.api.guardarConfig(configGlobal);
+            modal.style.display = 'none';
+        });
+
+        async function iniciar() {
+            configGlobal = await window.api.leerConfig();
+            await actualizarInterfaz();
+        }
+
+        iniciar();
+    </script>
+</body>
+</html>

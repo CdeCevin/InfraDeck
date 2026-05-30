@@ -1,0 +1,7 @@
+Electron/MacroPadConfig-win32-x64/
+Electron/logs/
+*.exe
+*.dll
+*.pak
+*.bin
+*.dat

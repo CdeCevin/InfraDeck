@@ -1,0 +1,107 @@
+{
+    "BA45FF00": {
+        "nombre": "Prev",
+        "tipo": "tecla",
+        "valor": "previous track"
+    },
+    "B946FF00": {
+        "nombre": "Pause",
+        "tipo": "tecla",
+        "valor": "play/pause media"
+    },
+    "B847FF00": {
+        "nombre": "Next",
+        "tipo": "tecla",
+        "valor": "next track"
+    },
+    "BB44FF00": {
+        "nombre": "Vol-",
+        "tipo": "tecla",
+        "valor": "volume down"
+    },
+    "BF40FF00": {
+        "nombre": "Vol+",
+        "tipo": "tecla",
+        "valor": "volume up"
+    },
+    "BC43FF00": {
+        "nombre": "Mute",
+        "tipo": "tecla",
+        "valor": "volume mute"
+    },
+    "F807FF00": {
+        "nombre": "Menos (-): gemini.google.com",
+        "tipo": "web",
+        "valor": "https://gemini.google.com/app?hl=es"
+    },
+    "EA15FF00": {
+        "nombre": "Más (+): Code.exe",
+        "tipo": "app",
+        "valor": "C:\\Users\\Cevin\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+    },
+    "F609FF00": {
+        "nombre": "EQ: Ensordecer",
+        "tipo": "script",
+        "valor": "ensordecer_discord"
+    },
+    "E916FF00": {
+        "nombre": "0: Mute Discord",
+        "tipo": "script",
+        "valor": "mutear_discord"
+    },
+    "E619FF00": {
+        "nombre": "100+: LMS UCM",
+        "tipo": "web_edge",
+        "valor": "https://lms.ucm.cl/my/"
+    },
+    "F20DFF00": {
+        "nombre": "200+: Portal UCM",
+        "tipo": "web_edge",
+        "valor": "https://sapprd.ucm.cl/sap/bc/ui2/flp?sap-ushell-config=embedded#CompetencyEvidence-display"
+    },
+    "F30CFF00": {
+        "nombre": "1: YouTube",
+        "tipo": "web",
+        "valor": "https://www.youtube.com"
+    },
+    "E718FF00": {
+        "nombre": "2: Toggle Steam",
+        "tipo": "script",
+        "valor": "toggle_steam"
+    },
+    "A15EFF00": {
+        "nombre": "3: WhatsApp",
+        "tipo": "script",
+        "valor": "toggle_whatsapp"
+    },
+    "F708FF00": {
+        "nombre": "4: Netflix",
+        "tipo": "web_edge",
+        "valor": "https://www.netflix.com/browse"
+    },
+    "E31CFF00": {
+        "nombre": "5: Disney+",
+        "tipo": "web_edge",
+        "valor": "https://www.disneyplus.com/es-419/home?"
+    },
+    "A55AFF00": {
+        "nombre": "6: Rocket League",
+        "tipo": "app",
+        "valor": "F:\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe"
+    },
+    "BD42FF00": {
+        "nombre": "7: Moonlighter 2 The Endless Vault.exe",
+        "tipo": "app",
+        "valor": "F:\\Steam\\steamapps\\common\\Moonlighter 2 The Endless Vault\\Moonlighter 2 The Endless Vault.exe"
+    },
+    "AD52FF00": {
+        "nombre": "8: RiotClientServices.exe",
+        "tipo": "app",
+        "valor": "F:\\Riot Games\\Riot Client\\RiotClientServices.exe"
+    },
+    "B54AFF00": {
+        "nombre": "9: MacroPadConfig.exe",
+        "tipo": "script",
+        "valor": "toggle_editMacroPad"
+    }
+}
